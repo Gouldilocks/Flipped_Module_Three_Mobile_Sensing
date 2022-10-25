@@ -28,6 +28,11 @@ static double redArr[100];
 static double blueArr[100];
 static double greenArr[100];
 
+// Variable to see how many frames failed to detect a finger
+static int maxFailures = 10;
+// The max number of failed frames until it determines a finger is not there
+static int numNotFinger = maxFailures;
+
 #pragma mark ===Write Your Code Here===
 // you can define your own functions here for processing the image
 
@@ -45,11 +50,10 @@ static double greenArr[100];
     cv::putText(_image, text, cv::Point(0, 50), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(5), 1, 2);
     
     int heuristic = 100;
-    int secondHeuristic = 100;
-    if ((avgPixelIntensity.val[0]-heuristic > avgPixelIntensity.val[1] && avgPixelIntensity.val[0]-heuristic > avgPixelIntensity.val[2]) || (avgPixelIntensity.val[0] > secondHeuristic && avgPixelIntensity.val[1] > secondHeuristic && avgPixelIntensity[2] > secondHeuristic)){
+    if ((avgPixelIntensity.val[0]-heuristic > avgPixelIntensity.val[1] && avgPixelIntensity.val[0]-heuristic > avgPixelIntensity.val[2]))
+    {
         if (counter == 100){
             cv::putText(_image, "Finger", cv::Point(0, 90), FONT_HERSHEY_PLAIN, 0.75, Scalar::all(255), 1, 2);
-            
             counter = 0;
         }
         
@@ -58,6 +62,15 @@ static double greenArr[100];
         blueArr[counter] = avgPixelIntensity.val[2];
         counter++;
         
+        // reset the number of failures to 0
+        numNotFinger = 0;
+        
+        return true;
+    }
+    
+    // if we have not seen the max number of failures yet, then still return true
+    if (numNotFinger < maxFailures){
+        numNotFinger++;
         return true;
     }
     

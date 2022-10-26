@@ -1,0 +1,7 @@
+Christian Gould, Simon Asenime, Kas Taghavi, Muhammad Ashraf
+
+1. Given that each float array is 100 points, how many milliseconds of data has been collected? Please give your method for deriving this timespan
+
+    Given that opencv takes data at 30fps by default, then we have (100/30) * 1000 = 3,333.33  milliseconds of data.
+    
+    We came to this, because we have 100 frames of data, at 30 frames per second, this gives us 3.33 seconds of data. Multiply by 1000 to get milliseconds, and you get our answer.

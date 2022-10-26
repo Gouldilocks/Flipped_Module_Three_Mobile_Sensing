@@ -18,7 +18,6 @@
 
 
 
-
 // set the image for processing later
 -(void) setImage:(CIImage*)ciFrameImage
       withBounds:(CGRect)rect

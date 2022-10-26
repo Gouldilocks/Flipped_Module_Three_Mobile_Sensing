@@ -14,6 +14,10 @@ class ViewController: UIViewController   {
     //MARK: Class Properties
     var filters : [CIFilter]! = nil
     var videoManager:VideoAnalgesic! = nil
+    
+    @IBOutlet weak var cameraButton: UIButton!
+    @IBOutlet weak var flashButton: UIButton!
+    
     let pinchFilterIndex = 2
     var detector:CIDetector! = nil
     let bridge = OpenCVBridge()
@@ -96,12 +100,21 @@ class ViewController: UIViewController   {
                              withBounds: retImage.extent, // the bounds of the image
                              andContext: self.videoManager.getCIContext())
         
-        let torch = self.bridge.processFinger()
-        if (torch){
+        let finger = self.bridge.processFinger()
+        if (finger){
             self.videoManager.turnOnFlashwithLevel(1)
+            DispatchQueue.main.async {
+                self.cameraButton.isHidden = true
+                self.flashButton.isHidden = true
+            }
         }
         else {
             self.videoManager.turnOffFlash()
+            DispatchQueue.main.async {
+                self.cameraButton.isHidden = false
+                self.flashButton.isHidden = false
+            }
+            
         }
         retImage = self.bridge.getImageComposite() // get back opencv processed part of the image (overlayed on original)
         
